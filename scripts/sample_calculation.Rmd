@@ -2,6 +2,9 @@
 title: "sample_calculation.Rmd"
 date: "`r Sys.Date()`"
 output:
+  word_document:
+    toc: true
+    toc_depth: '3'
   html_document:
     toc: true
     toc_depth: 3
@@ -12,7 +15,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 
 # Список библиотек для установки, если их нет
-libraries_to_install <- c("tidyverse", "ggplot2")
+libraries_to_install <- c("tidyverse", "ggplot2", "TrialSize", "epiR", "DescTools")
 
 # Проверка и установка библиотек
 for (library_name in libraries_to_install) {
@@ -23,4 +26,47 @@ for (library_name in libraries_to_install) {
 
 library(tidyverse)
 library(ggplot2)
+library(TrialSize)
+library(epiR)
+library(DescTools)
+```
+
+
+Не будем использовать пакет TrialSize потому что он плохой.
+
+```{r}
+
+TwoSampleMean.NIS(
+    alpha = 0.025,
+    beta = 0.2,
+    sigma = 8.2,
+    k = 1,
+    delta = 0,
+    margin = -5
+)
+
+```
+
+Используем epi.sssupc из пакета epiR.
+
+Sample size for a parallel superiority trial, continuous outcome
+
+
+```{r}
+
+n_summary <- epi.sssupc(
+    treat = 6,
+    control = 2,
+    sigma = 2.4,
+    delta = 2,      # это граница превосходства!
+    n = NA,
+    r = 1,
+    alpha = 0.025,
+    power = 0.8
+)
+n_summary %>% 
+  as.data.frame() %>% 
+  rename(n.treat = n.control,
+         n.control = n.treat)
+
 ```

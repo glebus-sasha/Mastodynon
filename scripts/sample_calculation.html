@@ -1484,7 +1484,31 @@ border-radius: 0px;
 </div>
 
 
-
+<p>Не будем использовать пакет TrialSize потому что он плохой.</p>
+<pre class="r"><code>TwoSampleMean.NIS(
+    alpha = 0.025,
+    beta = 0.2,
+    sigma = 8.2,
+    k = 1,
+    delta = 0,
+    margin = -5
+)</code></pre>
+<pre><code>## [1] 42.22069</code></pre>
+<p>Используем epi.sssupc из пакета epiR.</p>
+<p>Sample size for a parallel superiority trial, continuous outcome</p>
+<pre class="r"><code>n_summary &lt;- epi.sssupc(
+    treat = 6,
+    control = 2,
+    sigma = 2.4,
+    delta = 2,      # это граница превосходства!
+    n = NA,
+    r = 1,
+    alpha = 0.05,
+    power = 0.8
+)
+n_summary %&gt;% as.data.frame()</code></pre>
+<pre><code>##   n.total n.treat n.control delta power
+## 1      36      18        18     2   0.8</code></pre>
 
 
 
