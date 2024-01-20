@@ -39,10 +39,10 @@ library(DescTools)
 TwoSampleMean.NIS(
     alpha = 0.025,
     beta = 0.2,
-    sigma = 8.2,
+    sigma = 2.4,
     k = 1,
-    delta = 0,
-    margin = -5
+    delta = 4,
+    margin = 2
 )
 
 ```
@@ -66,7 +66,6 @@ n_summary <- epi.sssupc(
 )
 n_summary %>% 
   as.data.frame() %>% 
-  rename(n.treat = n.control,
-         n.control = n.treat)
+  rename(n.control = n.control)
 
 ```
