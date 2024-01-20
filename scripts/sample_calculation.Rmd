@@ -1,0 +1,26 @@
+---
+title: "sample_calculation.Rmd"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Список библиотек для установки, если их нет
+libraries_to_install <- c("tidyverse", "ggplot2")
+
+# Проверка и установка библиотек
+for (library_name in libraries_to_install) {
+  if (!requireNamespace(library_name, quietly = TRUE)) {
+    install.packages(library_name, dependencies = TRUE)
+  }
+}
+
+library(tidyverse)
+library(ggplot2)
+```
