@@ -30,8 +30,17 @@ library(ggplot2)
 
 ```{r}
 data <- read.csv2("../data/team_5.csv")
-data <- data %>%
-  mutate_if(is.character, as.factor)
-data %>% summary()
+data_filtered <- data %>%
+  mutate_if(is.character, as.factor) %>%
+  mutate(
+    V0_DEM_GEN = factor("ж"),
+    V0_DEM_AGE = V0_DEM_AGE + 20
+  )
+
+data_filtered %>% summary()
+```
+```{r}
+source("eda_shiny_func.R")
+eda_shiny(data)
 ```
 
