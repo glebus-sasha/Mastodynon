@@ -1,0 +1,3 @@
+"","estimate","p.value","conf.low","conf.high","method","alternative","variable","holm_adjusted_p","bonferroni_adjusted_p"
+"1",1,1,0.0122629944249959,81.546151400157,"Fisher's Exact Test for Count Data","two.sided","V1_NORM_ECG",1,1
+"2",0,1,0,39.000549968693,"Fisher's Exact Test for Count Data","two.sided","V1_NORM_PHYS",1,1

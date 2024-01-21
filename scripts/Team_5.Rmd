@@ -35,7 +35,7 @@ library(dplyr)
 # EDA 
 
 ```{r}
-data <- read.csv2("team_5.csv")
+data <- read.csv2("../data/team_5.csv")
 data_filtered <- data %>%
   mutate_if(is.character, as.factor) %>%
   mutate(

@@ -1484,7 +1484,1975 @@ border-radius: 0px;
 </div>
 
 
+<div id="eda" class="section level1">
+<h1>EDA</h1>
+<pre class="r"><code>data &lt;- read.csv2(&quot;../data/team_5.csv&quot;)
+data_filtered &lt;- data %&gt;%
+  mutate_if(is.character, as.factor) %&gt;%
+  mutate(
+    V0_DEM_GEN = factor(&quot;ж&quot;),
+    V0_DEM_AGE = V0_DEM_AGE + 20
+  ) %&gt;%
+   mutate_at(vars(contains(&#39;NORM&#39;)), as.factor)
 
+non_unique &lt;- names(data_filtered)[sapply(data_filtered, function(x) length(unique(x)) == 1)]
+
+data_filtered &lt;- data_filtered %&gt;% select(-all_of(non_unique))
+data_filtered %&gt;% glimpse()</code></pre>
+<pre><code>## Rows: 52
+## Columns: 24
+## $ ID              &lt;int&gt; 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29,…
+## $ V0_GRP          &lt;fct&gt; Мастодинон, Мастодинон, Мастодинон, Мастодинон, Мастод…
+## $ V0_DEM_AGE      &lt;dbl&gt; 55, 47, 55, 45, 45, 51, 43, 50, 49, 54, 45, 46, 54, 46…
+## $ V1_TIDES_AMOUNT &lt;int&gt; 2, 5, 5, 6, 5, 6, 4, 7, 5, 5, 7, 1, 5, 4, 2, 6, 4, 8, …
+## $ V2_TIDES_AMOUNT &lt;int&gt; 4, 4, 8, 6, 0, 4, 3, 3, 6, 3, 5, 7, 5, 9, 1, 2, 7, 1, …
+## $ V1_CB_WBC       &lt;dbl&gt; 4.3, 6.5, 5.8, 6.4, 6.6, 4.7, 5.9, 5.0, 9.0, 6.9, 7.9,…
+## $ V1_CB_RBC       &lt;dbl&gt; 4.1, 5.1, 4.8, 4.2, 4.5, 5.2, 5.6, 4.6, 5.4, 4.5, 5.3,…
+## $ V1_CB_HGB       &lt;dbl&gt; 131.8, 144.9, 147.1, 127.7, 137.7, 121.1, 122.5, 137.4…
+## $ V1_CB_HCT       &lt;dbl&gt; 0.40, 0.41, 0.44, 0.45, 0.43, 0.39, 0.41, 0.42, 0.41, …
+## $ V1_CB_PLT       &lt;dbl&gt; 269.7, 318.2, 295.0, 342.7, 291.4, 240.6, 315.5, 302.7…
+## $ V1_CB_NEUT.     &lt;dbl&gt; 5.4, 2.8, 3.1, 4.1, 2.3, 3.3, 5.9, 4.9, 2.9, 2.6, 5.2,…
+## $ V1_CB_LYM.      &lt;dbl&gt; 1.3, 1.2, 1.7, 2.2, 1.3, 1.4, 1.4, 2.1, 1.8, 2.2, 1.8,…
+## $ V1_CB_BAS.      &lt;dbl&gt; 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,…
+## $ V1_NORM_ECG     &lt;fct&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, …
+## $ V1_NORM_PHYS    &lt;fct&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ V2_CB_WBC       &lt;dbl&gt; 5.4, 7.3, 4.0, 7.7, 4.5, 4.7, 6.8, 4.5, 5.1, 8.0, 5.2,…
+## $ V2_CB_RBC       &lt;dbl&gt; 4.4, 4.0, 5.0, 5.5, 5.2, 4.4, 5.5, 4.1, 4.5, 5.0, 5.0,…
+## $ V2_CB_HGB       &lt;dbl&gt; 126.0, 129.2, 122.9, 136.1, 124.4, 141.0, 149.5, 134.5…
+## $ V2_CB_HCT       &lt;dbl&gt; 0.46, 0.40, 0.42, 0.42, 0.45, 0.48, 0.43, 0.41, 0.44, …
+## $ V2_CB_PLT       &lt;dbl&gt; 302.1, 318.1, 290.8, 338.6, 314.4, 265.4, 347.8, 294.2…
+## $ V2_CB_NEUT.     &lt;dbl&gt; 3.3, 2.0, 2.2, 2.6, 3.1, 3.6, 3.3, 2.5, 4.3, 3.2, 5.2,…
+## $ V2_CB_LYM.      &lt;dbl&gt; 1.7, 1.2, 1.7, 1.2, 1.9, 1.1, 1.1, 1.9, 1.6, 2.0, 1.2,…
+## $ V2_CB_BAS.      &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ V2_NORM_PHYS    &lt;fct&gt; 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, …</code></pre>
+</div>
+<div id="введение" class="section level1">
+<h1>1. Введение</h1>
+<p>Постменопаузальный синдром с приливами является распространенным
+явлением у женщин после менопаузы. Приливы могут влиять на качество
+жизни и часто становятся причиной обращения к врачу. Приливы
+представляют внезапное ощущение тепла в верхней части тела, которое
+обычно распространяется наиболее интенсивно на лицо, шею и грудь. При
+этом кожа может покраснеть. Вот несколько общих фактов:</p>
+<ul>
+<li>Распространенность: Большинство женщин (около 75-85%) испытывают
+приливы во время постменопаузы.</li>
+<li>Длительность симптомов: Приливы могут продолжаться в течение
+нескольких лет после установления менопаузы.</li>
+<li>Интенсивность: Симптомы могут варьировать от легких до тяжелых,
+влияя на ежедневную активность и сон.</li>
+<li>Влияние на качество жизни: Приливы могут существенно повлиять на
+физическое и эмоциональное благополучие женщин. Существующая терапия для
+лечения постменопаузального синдрома с приливами:</li>
+<li>Гормональная терапия: Пациентам может быть предложена гормональная
+заместительная терапия для компенсации снижения уровня эстрогенов.</li>
+<li>Изменения в образе жизни: Регулярные физические упражнения, здоровое
+питание и управление стрессом могут снизить частоту и интенсивность
+приливов.</li>
+<li>Препараты без гормонов: Некоторые женщины предпочитают использовать
+альтернативные методы, такие как препараты без гормонов или натуральные
+средства. Некоторым женщинам нельзя применять гормональную терапию,
+поэтому разрабатываются альтернативные лекарственные препараты, которые
+могли бы улучшить качество жизни женщин в постменопаузальный период с
+приливами.</li>
+</ul>
+<div id="терапевтическая-зона-препарата" class="section level2">
+<h2>1.1 Терапевтическая зона препарата</h2>
+<p>Мастодинон®, капли для приема внутрь планируется использовать в
+гинекологической терапевтической зоне</p>
+</div>
+<div id="ключевые-особенности-клинического-исследования" class="section level2">
+<h2>1.2 Ключевые особенности клинического исследования</h2>
+<p>Точки оценки эффективности и безопасности/</p>
+<p>Оценка эффективности проводилась путем сравнения количества приливов
+в 2 группах(контрольная группа и группа плацебо) до начала приема
+препарата и после терапии</p>
+<p>Безопасность терапии оценивалась путем сравнения показателей EGC,
+VIT(АД, ЧСС, ЧДД), АОК до начала приема терапии и после</p>
+<p>Количество субъектов - 52</p>
+<p>Данное исследование был направлено на расширение показаний для
+применения препарата Мастодинон®. Согласно справочнику VIDAL в настоящее
+время показания препарата не включают постменопаузальный синдром, в
+частности, сопровождающийся приливами. По данным литературы (Abaspoor
+Z., 2011) аналог данного препарата Vitex agnus-castus был ранее успешно
+применен для лечения постменопаузального синдрома. В представленном
+исследовании предлагается расширение целевой возрастной группы по
+сравнению с Vitex agnus-castus с 45-60 лет до 40-60 лет.</p>
+</div>
+</div>
+<div id="цели-и-задачи-исследования" class="section level1">
+<h1>2. Цели и задачи исследования</h1>
+<p>Целью данного исследования является оценка превосходящей
+терапевтической эффективности и безопасности препарата Мастодинон®,
+капли для приема внутрь, и плацебо при лечении постменопаузального
+синдрома, сопровождающегося приливами</p>
+<p>Основная задача: Изучение превосходящей терапевтической эффективности
+препарата Мастодинон® и плацебо при лечении постменопаузального
+синдрома, сопровождающегося приливами, оцениваемыми по количеству
+приливов в сутки.</p>
+<p>Дополнительные задачи: Оценка общей длительности периодов приливов в
+течение суток; Оценка доли случаев, в которых снижение суммы баллов по
+опроснику Куппермана составило 25% и более по сравнению с исходной
+суммой баллов на визите 1 (День 0); Оценка степени снижения
+систолического и диастолического артериального давления по сравнению с
+исходными значениями; Изучение безопасности препарата Мастодинон®, капли
+для приема внутрь, и плацебо при лечении постменопаузального синдрома,
+сопровождающегося приливами: оценка нежелательных явлений в группах
+лечения; сравнение частоты нежелательных явлений в группах лечения.</p>
+</div>
+<div id="план-исследования" class="section level1">
+<h1>3. План исследования</h1>
+<div id="описание-дизайна" class="section level2">
+<h2>3.1 Описание дизайна</h2>
+<p>Описание дизайна: Проспективное, многоцентровое, рандомизированное,
+плацебо-контролируемое, двойное слепое клиническое исследование в
+параллельных группах Графическая схема-репрезентация</p>
+</div>
+<div id="обоснование-дизайна-исследования-в-том-числе-выборка-контрольных-групп" class="section level2">
+<h2>3.2 Обоснование дизайна исследования, в том числе выборка
+контрольных групп:</h2>
+<p>Данное исследование проводится в параллельных группах, поскольку
+такой дизайн исследования минимизирует риск эффекта переноса: одна
+группа никак не влияет на другую.</p>
+</div>
+<div id="лечение" class="section level2">
+<h2>3.3 Лечение</h2>
+<div id="описание-исследуемого-препарата" class="section level3">
+<h3>3.3.1 Описание исследуемого препарата</h3>
+<p><em>Активное вещество:</em></p>
+<p>100 г препарата содержит: Vitex agnus castus (Agnus castus) D1 20 г;
+Caulophyllum thalictroides D4 10 г; Cyclamen europaeum (Cyclamen) D4 10
+г; Strychnos ignatii (Ignatia) D6 10 г; Iris versicolor (Iris) D2 20 г;
+Lilium lancifolium (Lilium tigrinum) D3 10 г</p>
+<p><em>Вспомогательные вещества:</em> Этанол 47,0 – 53,0 % (в объёмном
+отношении).</p>
+<p><em>Описание:</em> Мастодинон® - растительный негормональный препарат
+В качестве исследуемого препарата было использовано плацебо для оценки
+фактической эффективности Мастодинона, также позволяет контролировать
+эффект плацебо, который может негативно повлиять на результаты
+исследования</p>
+</div>
+</div>
+<div id="выбор-популяции" class="section level2">
+<h2>3.4 Выбор популяции</h2>
+<p>Постменопаузальный синдром с приливами является распространенным
+явлением у женщин после менопаузы, значительно нарушающим качество
+жизни. С учетом увеличения распространенности ранней менопаузы в
+последние годы в исследование будут включаться женщины от 40 до 60 лет
+включительно с подтвержденным менопаузальным синдромом В исследование
+планируется включить (рандомизировать) 52 пациента (по 26 пациентов в
+каждую группу) с учетом возможного досрочного выбывания 10%. Минимально
+достаточное для статистического анализа количество пациентов – 46, по 23
+пациента в каждую из групп лечения, закончивших исследование по
+Протоколу.</p>
+<div id="критерии-включения" class="section level3">
+<h3>3.4.1 Критерии включения</h3>
+<ol style="list-style-type: decimal">
+<li><p>Добровольно подписанное пациентом Информированное согласие на
+участие в исследовании.</p></li>
+<li><p>Женщины в возрасте от 40 до 60 лет включительно.</p></li>
+<li><p>Наличие диагноза постменопаузального синдрома, сопровождающегося
+приливами, подтвержденного при осмотре гинекологом не более 3 месяцев до
+исследования.</p></li>
+<li><p>Отрицательный результат теста на беременность (кроме женщин с
+длительностью периода менопаузы более 2 лет).</p></li>
+<li><p>Способность понять предоставленную информацию о клиническом
+исследовании, готовность к соблюдению требований протокола исследования,
+способность самостоятельно применять препараты исследования и оценивать
+симптомы с помощью опросников по протоколу.</p></li>
+</ol>
+</div>
+<div id="критерии-невключения" class="section level3">
+<h3>3.4.2 Критерии невключения</h3>
+<p>Прием эстроген-/прогестерон-содержащих препаратов в течение 6 месяцев
+до исследования; Применение глюкокортикостероидов в течение 30 дней до
+начала исследования и/или планы по применению глюкокортикостероидов в
+ходе исследования; Изменение гипотензивной терапии в течение последних 3
+месяцев (в т.ч. назначение бета-блокаторов); Невозможность отмены на
+период исследования других лекарственных препаратов, способных повлиять
+на результат настоящего исследования, например, других гомеопатических
+средств, и/или средств “народной терапии”, либо прием которых
+несовместим с терапией исследования; Тяжелое сердечно-сосудистое
+заболевание или неврологическое заболевание, которое, по мнению врача,
+не позволяет принять участия в исследовании, в частности:</p>
+<ul>
+<li><p>тяжелая (стадия IV классификации Канадского Сердечно-Сосудистого
+Общества (Canadian Cardiovascular Society)) или нестабильная
+стенокардия;</p></li>
+<li><p>декомпенсированная хроническая сердечная недостаточность ( IV
+степень по NYHA);</p></li>
+<li><p>инфаркт миокарда в течение последних 6 месяцев;</p></li>
+<li><p>неконтролируемая артериальная гипертензия с систолическим АД &gt;
+180 мм рт.ст и/или диастолическим АД &gt; 115 мм рт.ст.</p></li>
+<li><p>перенесенное острое нарушение мозгового кровообращения в течение
+последних 6 месяцев.</p></li>
+</ul>
+<p>Пациенты, участвующие в других клинических исследованиях
+лекарственных средств на момент Визита скрининга либо участвовавшие в
+них в течение 30 дней до Визита скрининга; Пациенты, перенесшие
+хирургическую операцию в течение 30 дней до Визита скрининга и пациенты,
+у которых в ходе исследования (до завершения Визита последующего
+наблюдения) планируется проведение хирургических операций, включая
+диагностические процедуры, или пребывание в стационаре; Известная или
+подозреваемая наркотическая/алкогольная зависимость; Предполагаемая
+низкая приверженность пациента лечению или неспособность выполнять
+процедуры и соблюдать ограничения согласно протоколу исследования
+(например, вследствие психических заболеваний); Любые заболевания
+сердечно-сосудистой системы, почек, печени, ЖКТ, эндокринной и нервной
+системы или любые другие состояния/заболевания, которые по мнению
+исследователя могут сделать участие в исследовании небезопасным для
+пациента.</p>
+</div>
+</div>
+<div id="описание-режима-дозирования-и-введения-препаратов" class="section level2">
+<h2>3.5 Описание режима дозирования и введения препаратов</h2>
+<p>40 капель перорально натощак утром (до завтрака) ежедневно в течение
+4 недель</p>
+</div>
+<div id="метод-распределения-по-группам" class="section level2">
+<h2>3.6 Метод распределения по группам</h2>
+<p>Рандомизация</p>
+</div>
+<div id="последовательность-и-длительность-всех-этапов-исследования" class="section level2">
+<h2>3.7 Последовательность и длительность всех этапов исследования</h2>
+<p>Периоды исследования: I. Скрининг + рандомизация: Визит 1 (День 0)
+II. Лечение 4 недели (28 дней) III. Контроль эффективности терапии:
+Визит 2 (День 29)</p>
+</div>
+<div id="описание-методики-оценки-конечных-точек" class="section level2">
+<h2>3.8 Описание методики оценки конечных точек</h2>
+<div id="оценка-первичной-точки" class="section level3">
+<h3>3.8.1 Оценка первичной точки</h3>
+<p>Для проверки основной гипотезы исследования в качестве первичной
+конечной точки выбрано количество приливов в течение 24 часов. Для
+анализа данной конечной точки планируется построение одностороннего
+97.5% доверительного интервала для разницы в средних (двустороннего 95%
+ДИ). Критерий превосходства определяется условием, при котором нижняя
+граница 97.5% доверительного интервала для разности средних превышает
+пороговое значение в 2 прилива в течение 24 часов по сравнению с
+плацебо. Сравнение групп планируется проводить с помощью t-критерия
+Стьюдента для независимых выборок.</p>
+</div>
+<div id="оценка-вторичных-точек" class="section level3">
+<h3>3.8.2 Оценка вторичных точек</h3>
+<p>В исследовании выбраны следующие вторичные конечные точки:</p>
+<ol style="list-style-type: decimal">
+<li><p>Общая длительность периодов приливов в течение 24-х часов (в
+минутах).</p></li>
+<li><p>Доля случаев, в которых снижение суммы баллов по опроснику
+Куппермана составило 25% и более по сравнению с исходной суммой баллов
+на визите 1.</p></li>
+<li><p>Снижение среднесуточного систолического и диастолического
+артериального давления по сравнению с исходными значениями в мм
+рт.ст.</p></li>
+</ol>
+<p>При анализе вторичных конечных точек будут использованы следующие
+методы: сравнение частотных переменных будет производиться с помощью
+критерия хи-квадрат с расчетом отношения шансов; сравнение величин,
+относящихся к различным шкалам (баллы по шкале Куппермана) и сравнению
+длительности будет осуществляться с помощью t-теста. При описании всех
+оцениваемых величин, будут представлены как p-значения, так и точечные
+оценки с соответствующими доверительными интервалами: односторонний
+97.5% для п.1 и п. 3 и 95% для п. 2.</p>
+</div>
+</div>
+</div>
+<div id="информация-о-субъектах" class="section level1">
+<h1>4. Информация о субъектах</h1>
+<div id="описательные-статистики-согласно-протоколу" class="section level2">
+<h2>4.1 Описательные статистики согласно протоколу</h2>
+<pre class="r"><code>data_summary &lt;- data %&gt;%
+  mutate_if(is.character, as.factor) %&gt;%
+  mutate(
+    V0_DEM_GEN = factor(&quot;Женщина&quot;),
+    V0_DEM_AGE = V0_DEM_AGE + 20
+  ) %&gt;%
+   mutate_at(vars(contains(&#39;NORM&#39;)), as.factor)%&gt;%
+   mutate_if(is.numeric, as.double)
+
+
+
+# Cохранение таблицы в виде картинки
+# gt::gtsave(as_gt(table_summary), file =&#39;table_summary.png&#39;)
+
+cv_table &lt;- data_summary %&gt;%
+  summarise(across(where(is.numeric), ~sd(.) / mean(.), .names = &quot;{.col}&quot;))
+
+print(cv_table)</code></pre>
+<pre><code>##          ID V0_DEM_AGE V1_TIDES_AMOUNT V2_TIDES_AMOUNT V1_CB_WBC V1_CB_RBC
+## 1 0.5718776 0.07777318       0.4047775       0.4851313 0.2106798 0.1068886
+##    V1_CB_HGB  V1_CB_HCT V1_CB_PLT V1_CB_NEUT. V1_CB_LYM. V1_CB_MON. V1_CB_EO.
+## 1 0.06813057 0.04830816 0.1225541   0.3419947  0.2194499          0         0
+##   V1_CB_BAS. V2_CB_WBC V2_CB_RBC V2_CB_HGB  V2_CB_HCT  V2_CB_PLT V2_CB_NEUT.
+## 1   5.048782 0.2240035 0.1110919 0.0628402 0.06952877 0.08999864   0.2532662
+##   V2_CB_LYM. V2_CB_MON. V2_CB_EO. V2_CB_BAS.
+## 1  0.2212236          0         0   7.211103</code></pre>
+<pre class="r"><code>statistics_table &lt;- data_summary %&gt;%
+  summarise(
+    median = median(V1_TIDES_AMOUNT),
+    iqr = IQR(V1_TIDES_AMOUNT),
+    mean = mean(V1_TIDES_AMOUNT),
+    sd = sd(V1_TIDES_AMOUNT),
+    min = min(V1_TIDES_AMOUNT),
+    max = max(V1_TIDES_AMOUNT)
+  )
+print(statistics_table)</code></pre>
+<pre><code>##   median iqr     mean      sd min max
+## 1      5   3 4.596154 1.86042   1   9</code></pre>
+<pre class="r"><code>statistics_table &lt;- data_summary %&gt;%
+  summarise(
+    median = median(V1_CB_HCT),
+    iqr = IQR(V1_CB_HCT),
+    mean = mean(V1_CB_HCT),
+    sd = sd(V1_CB_HCT),
+    min = min(V1_CB_HCT),
+    max = max(V1_CB_HCT)
+  )
+print(statistics_table)</code></pre>
+<pre><code>##   median  iqr      mean        sd  min  max
+## 1    0.4 0.03 0.4069231 0.0196577 0.38 0.46</code></pre>
+<pre class="r"><code>table_summary &lt;- data_summary %&gt;%
+  select(-ID, -V1_TIDES_AMOUNT, -V1_CB_HCT) %&gt;%
+  tbl_summary(
+    by = V0_GRP,
+    type = list(
+      all_continuous() ~ &quot;continuous2&quot;,
+      all_categorical() ~ &quot;categorical&quot;
+    ),
+    missing = &quot;no&quot;,
+    statistic = list(
+      all_continuous() ~ c(&quot;{median}({IQR})&quot;, &quot;{mean}±{sd}&quot;, &quot;{min}; {max}&quot;),
+      all_categorical() ~ &quot;{n}({p}%)&quot;
+    )
+  ) %&gt;% 
+  add_overall() %&gt;% 
+  add_n() %&gt;% 
+#  add_p() %&gt;% 
+  add_ci() %&gt;%
+  modify_header(label = &quot;**Переменные**&quot;) %&gt;%   modify_footnote(
+    all_stat_cols() ~ &quot;Median (IQR), Mean±std, Min; Max, or N(Frequency)&quot;
+  ) 
+table_summary</code></pre>
+<div id="mftmenkilc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#mftmenkilc table {
+font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+#mftmenkilc thead, #mftmenkilc tbody, #mftmenkilc tfoot, #mftmenkilc tr, #mftmenkilc td, #mftmenkilc th {
+border-style: none;
+}
+#mftmenkilc p {
+margin: 0;
+padding: 0;
+}
+#mftmenkilc .gt_table {
+display: table;
+border-collapse: collapse;
+line-height: normal;
+margin-left: auto;
+margin-right: auto;
+color: #333333;
+font-size: 16px;
+font-weight: normal;
+font-style: normal;
+background-color: #FFFFFF;
+width: auto;
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #A8A8A8;
+border-right-style: none;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #A8A8A8;
+border-left-style: none;
+border-left-width: 2px;
+border-left-color: #D3D3D3;
+}
+#mftmenkilc .gt_caption {
+padding-top: 4px;
+padding-bottom: 4px;
+}
+#mftmenkilc .gt_title {
+color: #333333;
+font-size: 125%;
+font-weight: initial;
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 5px;
+padding-right: 5px;
+border-bottom-color: #FFFFFF;
+border-bottom-width: 0;
+}
+#mftmenkilc .gt_subtitle {
+color: #333333;
+font-size: 85%;
+font-weight: initial;
+padding-top: 3px;
+padding-bottom: 5px;
+padding-left: 5px;
+padding-right: 5px;
+border-top-color: #FFFFFF;
+border-top-width: 0;
+}
+#mftmenkilc .gt_heading {
+background-color: #FFFFFF;
+text-align: center;
+border-bottom-color: #FFFFFF;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+}
+#mftmenkilc .gt_bottom_border {
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+}
+#mftmenkilc .gt_col_headings {
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+}
+#mftmenkilc .gt_col_heading {
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: normal;
+text-transform: inherit;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+vertical-align: bottom;
+padding-top: 5px;
+padding-bottom: 6px;
+padding-left: 5px;
+padding-right: 5px;
+overflow-x: hidden;
+}
+#mftmenkilc .gt_column_spanner_outer {
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: normal;
+text-transform: inherit;
+padding-top: 0;
+padding-bottom: 0;
+padding-left: 4px;
+padding-right: 4px;
+}
+#mftmenkilc .gt_column_spanner_outer:first-child {
+padding-left: 0;
+}
+#mftmenkilc .gt_column_spanner_outer:last-child {
+padding-right: 0;
+}
+#mftmenkilc .gt_column_spanner {
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+vertical-align: bottom;
+padding-top: 5px;
+padding-bottom: 5px;
+overflow-x: hidden;
+display: inline-block;
+width: 100%;
+}
+#mftmenkilc .gt_spanner_row {
+border-bottom-style: hidden;
+}
+#mftmenkilc .gt_group_heading {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: initial;
+text-transform: inherit;
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+vertical-align: middle;
+text-align: left;
+}
+#mftmenkilc .gt_empty_group_heading {
+padding: 0.5px;
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: initial;
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+vertical-align: middle;
+}
+#mftmenkilc .gt_from_md > :first-child {
+margin-top: 0;
+}
+#mftmenkilc .gt_from_md > :last-child {
+margin-bottom: 0;
+}
+#mftmenkilc .gt_row {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+margin: 10px;
+border-top-style: solid;
+border-top-width: 1px;
+border-top-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 1px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 1px;
+border-right-color: #D3D3D3;
+vertical-align: middle;
+overflow-x: hidden;
+}
+#mftmenkilc .gt_stub {
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: initial;
+text-transform: inherit;
+border-right-style: solid;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+padding-left: 5px;
+padding-right: 5px;
+}
+#mftmenkilc .gt_stub_row_group {
+color: #333333;
+background-color: #FFFFFF;
+font-size: 100%;
+font-weight: initial;
+text-transform: inherit;
+border-right-style: solid;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+padding-left: 5px;
+padding-right: 5px;
+vertical-align: top;
+}
+#mftmenkilc .gt_row_group_first td {
+border-top-width: 2px;
+}
+#mftmenkilc .gt_row_group_first th {
+border-top-width: 2px;
+}
+#mftmenkilc .gt_summary_row {
+color: #333333;
+background-color: #FFFFFF;
+text-transform: inherit;
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+}
+#mftmenkilc .gt_first_summary_row {
+border-top-style: solid;
+border-top-color: #D3D3D3;
+}
+#mftmenkilc .gt_first_summary_row.thick {
+border-top-width: 2px;
+}
+#mftmenkilc .gt_last_summary_row {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+}
+#mftmenkilc .gt_grand_summary_row {
+color: #333333;
+background-color: #FFFFFF;
+text-transform: inherit;
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+}
+#mftmenkilc .gt_first_grand_summary_row {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+border-top-style: double;
+border-top-width: 6px;
+border-top-color: #D3D3D3;
+}
+#mftmenkilc .gt_last_grand_summary_row_top {
+padding-top: 8px;
+padding-bottom: 8px;
+padding-left: 5px;
+padding-right: 5px;
+border-bottom-style: double;
+border-bottom-width: 6px;
+border-bottom-color: #D3D3D3;
+}
+#mftmenkilc .gt_striped {
+background-color: rgba(128, 128, 128, 0.05);
+}
+#mftmenkilc .gt_table_body {
+border-top-style: solid;
+border-top-width: 2px;
+border-top-color: #D3D3D3;
+border-bottom-style: solid;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+}
+#mftmenkilc .gt_footnotes {
+color: #333333;
+background-color: #FFFFFF;
+border-bottom-style: none;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 2px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+}
+#mftmenkilc .gt_footnote {
+margin: 0px;
+font-size: 90%;
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 5px;
+padding-right: 5px;
+}
+#mftmenkilc .gt_sourcenotes {
+color: #333333;
+background-color: #FFFFFF;
+border-bottom-style: none;
+border-bottom-width: 2px;
+border-bottom-color: #D3D3D3;
+border-left-style: none;
+border-left-width: 2px;
+border-left-color: #D3D3D3;
+border-right-style: none;
+border-right-width: 2px;
+border-right-color: #D3D3D3;
+}
+#mftmenkilc .gt_sourcenote {
+font-size: 90%;
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 5px;
+padding-right: 5px;
+}
+#mftmenkilc .gt_left {
+text-align: left;
+}
+#mftmenkilc .gt_center {
+text-align: center;
+}
+#mftmenkilc .gt_right {
+text-align: right;
+font-variant-numeric: tabular-nums;
+}
+#mftmenkilc .gt_font_normal {
+font-weight: normal;
+}
+#mftmenkilc .gt_font_bold {
+font-weight: bold;
+}
+#mftmenkilc .gt_font_italic {
+font-style: italic;
+}
+#mftmenkilc .gt_super {
+font-size: 65%;
+}
+#mftmenkilc .gt_footnote_marks {
+font-size: 75%;
+vertical-align: 0.4em;
+position: initial;
+}
+#mftmenkilc .gt_asterisk {
+font-size: 100%;
+vertical-align: 0;
+}
+#mftmenkilc .gt_indent_1 {
+text-indent: 5px;
+}
+#mftmenkilc .gt_indent_2 {
+text-indent: 10px;
+}
+#mftmenkilc .gt_indent_3 {
+text-indent: 15px;
+}
+#mftmenkilc .gt_indent_4 {
+text-indent: 20px;
+}
+#mftmenkilc .gt_indent_5 {
+text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Переменные&lt;/strong&gt;"><strong>Переменные</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;N&lt;/strong&gt;"><strong>N</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Overall&lt;/strong&gt;, N = 52&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;"><strong>Overall</strong>, N = 52<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;95% CI&lt;/strong&gt;&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;2&lt;/sup&gt;&lt;/span&gt;"><strong>95% CI</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>2</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Мастодинон&lt;/strong&gt;, N = 26&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;"><strong>Мастодинон</strong>, N = 26<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;95% CI&lt;/strong&gt;&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;2&lt;/sup&gt;&lt;/span&gt;"><strong>95% CI</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>2</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Плацебо&lt;/strong&gt;, N = 26&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;"><strong>Плацебо</strong>, N = 26<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;95% CI&lt;/strong&gt;&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;2&lt;/sup&gt;&lt;/span&gt;"><strong>95% CI</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>2</sup></span></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="label" class="gt_row gt_left">V0_DEM_GEN</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Женщина</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">52(100%)</td>
+<td headers="ci_stat_0" class="gt_row gt_center">91%, 100%</td>
+<td headers="stat_1" class="gt_row gt_center">26(100%)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">84%, 100%</td>
+<td headers="stat_2" class="gt_row gt_center">26(100%)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">84%, 100%</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V0_DEM_AGE</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center">48, 51</td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center">47, 50</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Median(IQR)</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">49.0(6.0)</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">49.0(6.8)</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">49.0(5.0)</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Mean±SD</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">48.8±3.8</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">49.2±3.9</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">48.5±3.7</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Minimum; Maximum</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">41.0; 55.0</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">42.0; 55.0</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">41.0; 55.0</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V2_TIDES_AMOUNT</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center">3.5, 5.3</td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center">3.6, 5.4</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Median(IQR)</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">4.00(3.00)</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">4.00(3.00)</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">4.00(3.00)</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Mean±SD</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">4.46±2.16</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">4.42±2.23</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">4.50±2.14</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Minimum; Maximum</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">0.00; 9.00</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">0.00; 9.00</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">1.00; 9.00</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V1_CB_WBC</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center">5.4, 6.5</td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center">5.7, 6.7</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Median(IQR)</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">6.00(2.03)</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">5.85(2.00)</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">6.30(1.85)</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Mean±SD</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">6.08±1.28</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">5.98±1.38</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">6.18±1.20</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Minimum; Maximum</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">4.30; 9.00</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">4.30; 9.00</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">4.30; 8.60</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V1_CB_RBC</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center">4.6, 5.1</td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center">4.8, 5.2</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Median(IQR)</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">4.80(0.83)</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">4.75(0.93)</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">4.90(0.78)</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Mean±SD</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">4.91±0.52</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">4.84±0.57</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">4.98±0.48</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Minimum; Maximum</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">4.00; 5.90</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">4.00; 5.90</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">4.30; 5.80</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V1_CB_HGB</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center">130, 137</td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center">130, 138</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Median(IQR)</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">132(16)</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">133(16)</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">131(15)</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Mean±SD</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">133±9</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">133±9</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">134±9</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Minimum; Maximum</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">121; 150</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">121; 148</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">121; 150</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V1_CB_PLT</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center">294, 322</td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center">286, 319</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Median(IQR)</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">300(42)</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">303(46)</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">300(33)</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Mean±SD</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">305±37</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">308±35</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">303±40</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Minimum; Maximum</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">236; 390</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">241; 389</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">236; 390</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V1_CB_NEUT.</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center">3.1, 4.1</td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center">2.7, 3.6</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Median(IQR)</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">3.00(1.93)</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">3.25(2.08)</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">2.60(1.53)</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Mean±SD</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">3.40±1.16</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">3.61±1.20</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">3.18±1.10</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Minimum; Maximum</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">2.10; 5.90</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">2.10; 5.90</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">2.10; 5.80</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V1_CB_LYM.</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center">1.5, 1.8</td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center">1.3, 1.5</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Median(IQR)</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">1.40(0.50)</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">1.60(0.48)</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">1.30(0.30)</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Mean±SD</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">1.52±0.33</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">1.62±0.35</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">1.42±0.29</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Minimum; Maximum</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">1.00; 2.30</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">1.00; 2.30</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">1.10; 2.00</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V1_CB_MON.</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    0.1</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">52(100%)</td>
+<td headers="ci_stat_0" class="gt_row gt_center">91%, 100%</td>
+<td headers="stat_1" class="gt_row gt_center">26(100%)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">84%, 100%</td>
+<td headers="stat_2" class="gt_row gt_center">26(100%)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">84%, 100%</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V1_CB_EO.</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    0.1</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">52(100%)</td>
+<td headers="ci_stat_0" class="gt_row gt_center">91%, 100%</td>
+<td headers="stat_1" class="gt_row gt_center">26(100%)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">84%, 100%</td>
+<td headers="stat_2" class="gt_row gt_center">26(100%)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">84%, 100%</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V1_CB_BAS.</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    0</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">50(96%)</td>
+<td headers="ci_stat_0" class="gt_row gt_center">86%, 99%</td>
+<td headers="stat_1" class="gt_row gt_center">25(96%)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">78%, 100%</td>
+<td headers="stat_2" class="gt_row gt_center">25(96%)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">78%, 100%</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    0.1</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">2(3.8%)</td>
+<td headers="ci_stat_0" class="gt_row gt_center">0.67%, 14%</td>
+<td headers="stat_1" class="gt_row gt_center">1(3.8%)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">0.20%, 22%</td>
+<td headers="stat_2" class="gt_row gt_center">1(3.8%)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">0.20%, 22%</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V1_NORM_ECG</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    0</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">50(96%)</td>
+<td headers="ci_stat_0" class="gt_row gt_center">86%, 99%</td>
+<td headers="stat_1" class="gt_row gt_center">25(96%)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">78%, 100%</td>
+<td headers="stat_2" class="gt_row gt_center">25(96%)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">78%, 100%</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    1</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">2(3.8%)</td>
+<td headers="ci_stat_0" class="gt_row gt_center">0.67%, 14%</td>
+<td headers="stat_1" class="gt_row gt_center">1(3.8%)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">0.20%, 22%</td>
+<td headers="stat_2" class="gt_row gt_center">1(3.8%)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">0.20%, 22%</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V1_NORM_PHYS</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    0</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">51(98%)</td>
+<td headers="ci_stat_0" class="gt_row gt_center">88%, 100%</td>
+<td headers="stat_1" class="gt_row gt_center">25(96%)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">78%, 100%</td>
+<td headers="stat_2" class="gt_row gt_center">26(100%)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">84%, 100%</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    1</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">1(1.9%)</td>
+<td headers="ci_stat_0" class="gt_row gt_center">0.10%, 12%</td>
+<td headers="stat_1" class="gt_row gt_center">1(3.8%)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">0.20%, 22%</td>
+<td headers="stat_2" class="gt_row gt_center">0(0%)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">0.00%, 16%</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V1_NORM_VIT</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    0</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">52(100%)</td>
+<td headers="ci_stat_0" class="gt_row gt_center">91%, 100%</td>
+<td headers="stat_1" class="gt_row gt_center">26(100%)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">84%, 100%</td>
+<td headers="stat_2" class="gt_row gt_center">26(100%)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">84%, 100%</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V2_CB_WBC</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center">5.3, 6.4</td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center">5.4, 6.4</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Median(IQR)</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">5.55(2.38)</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">5.35(2.58)</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">5.65(2.13)</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Mean±SD</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">5.86±1.31</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">5.85±1.38</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">5.87±1.27</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Minimum; Maximum</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">4.00; 8.50</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">4.00; 8.50</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">4.10; 8.50</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V2_CB_RBC</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center">4.7, 5.2</td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center">5.0, 5.4</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Median(IQR)</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">5.05(0.90)</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">5.00(1.10)</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">5.25(0.68)</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Mean±SD</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">5.06±0.56</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">4.93±0.62</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">5.18±0.48</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Minimum; Maximum</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">4.00; 6.00</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">4.00; 5.90</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">4.30; 6.00</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V2_CB_HGB</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center">132, 139</td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center">131, 138</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Median(IQR)</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">135(14)</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">136(14)</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">134(14)</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Mean±SD</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">135±8</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">136±9</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">135±8</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Minimum; Maximum</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">120; 150</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">121; 150</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">120; 148</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V2_CB_HCT</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center">0.41, 0.43</td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center">0.40, 0.43</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Median(IQR)</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">0.400(0.033)</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">0.410(0.030)</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">0.400(0.050)</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Mean±SD</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">0.417±0.029</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">0.418±0.028</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">0.415±0.030</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Minimum; Maximum</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">0.380; 0.500</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">0.380; 0.500</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">0.380; 0.490</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V2_CB_PLT</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center">288, 309</td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center">293, 316</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Median(IQR)</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">302(38)</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">295(33)</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">305(40)</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Mean±SD</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">302±27</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">298±25</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">305±29</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Minimum; Maximum</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">241; 359</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">241; 348</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">246; 359</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V2_CB_NEUT.</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center">3.1, 3.8</td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center">3.2, 3.9</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Median(IQR)</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">3.30(1.23)</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">3.25(1.45)</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">3.60(1.18)</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Mean±SD</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">3.50±0.89</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">3.45±0.96</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">3.55±0.82</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Minimum; Maximum</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">2.00; 5.70</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">2.00; 5.70</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">2.40; 5.50</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V2_CB_LYM.</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center">1.4, 1.7</td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center">1.4, 1.6</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Median(IQR)</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">1.50(0.53)</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">1.60(0.68)</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">1.50(0.30)</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Mean±SD</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">1.52±0.34</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">1.55±0.38</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">1.49±0.28</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Minimum; Maximum</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">1.00; 2.30</td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center">1.00; 2.30</td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center">1.10; 2.00</td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V2_CB_MON.</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    0.1</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">52(100%)</td>
+<td headers="ci_stat_0" class="gt_row gt_center">91%, 100%</td>
+<td headers="stat_1" class="gt_row gt_center">26(100%)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">84%, 100%</td>
+<td headers="stat_2" class="gt_row gt_center">26(100%)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">84%, 100%</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V2_CB_EO.</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    0.1</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">52(100%)</td>
+<td headers="ci_stat_0" class="gt_row gt_center">91%, 100%</td>
+<td headers="stat_1" class="gt_row gt_center">26(100%)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">84%, 100%</td>
+<td headers="stat_2" class="gt_row gt_center">26(100%)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">84%, 100%</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V2_CB_BAS.</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    0</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">51(98%)</td>
+<td headers="ci_stat_0" class="gt_row gt_center">88%, 100%</td>
+<td headers="stat_1" class="gt_row gt_center">26(100%)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">84%, 100%</td>
+<td headers="stat_2" class="gt_row gt_center">25(96%)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">78%, 100%</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    0.1</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">1(1.9%)</td>
+<td headers="ci_stat_0" class="gt_row gt_center">0.10%, 12%</td>
+<td headers="stat_1" class="gt_row gt_center">0(0%)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">0.00%, 16%</td>
+<td headers="stat_2" class="gt_row gt_center">1(3.8%)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">0.20%, 22%</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V2_NORM_ECG</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    0</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">52(100%)</td>
+<td headers="ci_stat_0" class="gt_row gt_center">91%, 100%</td>
+<td headers="stat_1" class="gt_row gt_center">26(100%)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">84%, 100%</td>
+<td headers="stat_2" class="gt_row gt_center">26(100%)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">84%, 100%</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V2_NORM_PHYS</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    0</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">47(90%)</td>
+<td headers="ci_stat_0" class="gt_row gt_center">78%, 96%</td>
+<td headers="stat_1" class="gt_row gt_center">24(92%)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">73%, 99%</td>
+<td headers="stat_2" class="gt_row gt_center">23(88%)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">69%, 97%</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    1</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">5(9.6%)</td>
+<td headers="ci_stat_0" class="gt_row gt_center">3.6%, 22%</td>
+<td headers="stat_1" class="gt_row gt_center">2(7.7%)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">1.3%, 27%</td>
+<td headers="stat_2" class="gt_row gt_center">3(12%)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">3.0%, 31%</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">V2_NORM_VIT</td>
+<td headers="n" class="gt_row gt_center">52</td>
+<td headers="stat_0" class="gt_row gt_center"></td>
+<td headers="ci_stat_0" class="gt_row gt_center"></td>
+<td headers="stat_1" class="gt_row gt_center"></td>
+<td headers="ci_stat_1" class="gt_row gt_center"></td>
+<td headers="stat_2" class="gt_row gt_center"></td>
+<td headers="ci_stat_2" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    0</td>
+<td headers="n" class="gt_row gt_center"></td>
+<td headers="stat_0" class="gt_row gt_center">52(100%)</td>
+<td headers="ci_stat_0" class="gt_row gt_center">91%, 100%</td>
+<td headers="stat_1" class="gt_row gt_center">26(100%)</td>
+<td headers="ci_stat_1" class="gt_row gt_center">84%, 100%</td>
+<td headers="stat_2" class="gt_row gt_center">26(100%)</td>
+<td headers="ci_stat_2" class="gt_row gt_center">84%, 100%</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="8"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> Median (IQR), Mean±std, Min; Max, or N(Frequency)</td>
+    </tr>
+    <tr>
+      <td class="gt_footnote" colspan="8"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>2</sup></span> CI = Confidence Interval</td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+</div>
+<div id="различия-групп-после-рандомизации-по-характеристикам" class="section level2">
+<h2>4.2 Различия групп после рандомизации по характеристикам</h2>
+<p>Переменные с одинаковыми значениями для всех пациентов, которые не
+подлежат сравнению: V0_DEM_GEN, V1_CB_MON., V1_CB_EO., V1_NORM_VIT,
+V2_CB_MON., V2_CB_EO., V2_NORM_ECG, V2_NORM_VIT</p>
+<pre class="r"><code>v1_v0_num_columns &lt;- names(data_filtered)[grepl(&quot;V1|V0&quot;, names(data_filtered)) &amp; sapply(data_filtered, is.numeric)]
+
+group_stats &lt;- data_filtered %&gt;%
+  select(all_of(v1_v0_num_columns), V0_GRP) %&gt;%
+  pivot_longer(cols = all_of(v1_v0_num_columns), names_to = &quot;переменная&quot;, values_to = &quot;value&quot;) %&gt;%
+  group_by(переменная, V0_GRP) %&gt;%
+  summarise(&#39;Среднее по группам&#39; = mean(value), &#39;Медиана по группам&#39; = median(value), .groups = &#39;drop&#39;)
+
+t_test_results &lt;- data_filtered %&gt;%
+  select(all_of(v1_v0_num_columns), V0_GRP) %&gt;%
+  pivot_longer(cols = all_of(v1_v0_num_columns), names_to = &quot;переменная&quot;, values_to = &quot;value&quot;) %&gt;%
+  group_by(переменная) %&gt;%
+  do(tidy(t.test(value ~ V0_GRP, data = .)))
+
+t_test_results$holm_adjusted_p &lt;- p.adjust(t_test_results$p.value, method = &quot;holm&quot;)
+t_test_results$fdr_adjusted_p &lt;- p.adjust(t_test_results$p.value, method = &quot;fdr&quot;)
+
+cat(&#39;Различающиеся колонки до поправок: &#39;, paste((t_test_results %&gt;%
+  filter(p.value &lt;= 0.05))$переменная, collapse = &#39;, &#39;), &#39;\n&#39;)</code></pre>
+<pre><code>## Различающиеся колонки до поправок:  V1_CB_LYM.</code></pre>
+<pre class="r"><code>cat(&#39;Различающиеся колонки после поправки Холма: &#39;, paste((t_test_results %&gt;%
+  filter(holm_adjusted_p &lt;= 0.05))$переменная, collapse = &#39;, &#39;), &#39;\n&#39;)</code></pre>
+<pre><code>## Различающиеся колонки после поправки Холма:</code></pre>
+<pre class="r"><code>t_test_results &lt;- left_join(t_test_results, group_stats, by = &quot;переменная&quot;)
+
+write.csv(t_test_results, file = &#39;t_test_results.csv&#39;)
+
+print(t_test_results)</code></pre>
+<pre><code>## # A tibble: 20 × 16
+## # Groups:   переменная [10]
+##    переменная  estimate estimate1 estimate2 statistic p.value parameter conf.low
+##    &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+##  1 V0_DEM_AGE   0.654    49.2      48.5        0.617   0.540       49.8 -1.47e+0
+##  2 V0_DEM_AGE   0.654    49.2      48.5        0.617   0.540       49.8 -1.47e+0
+##  3 V1_CB_BAS.   0         0.00385   0.00385    0       1           50   -1.09e-2
+##  4 V1_CB_BAS.   0         0.00385   0.00385    0       1           50   -1.09e-2
+##  5 V1_CB_HCT    0.00692   0.410     0.403      1.28    0.207       49.8 -3.96e-3
+##  6 V1_CB_HCT    0.00692   0.410     0.403      1.28    0.207       49.8 -3.96e-3
+##  7 V1_CB_HGB   -0.565   133.      134.        -0.222   0.825       49.9 -5.68e+0
+##  8 V1_CB_HGB   -0.565   133.      134.        -0.222   0.825       49.9 -5.68e+0
+##  9 V1_CB_LYM.   0.204     1.62      1.42       2.30    0.0259      48.3  2.55e-2
+## 10 V1_CB_LYM.   0.204     1.62      1.42       2.30    0.0259      48.3  2.55e-2
+## 11 V1_CB_NEUT.  0.423     3.61      3.18       1.32    0.192       49.6 -2.19e-1
+## 12 V1_CB_NEUT.  0.423     3.61      3.18       1.32    0.192       49.6 -2.19e-1
+## 13 V1_CB_PLT    5.25    308.      303.         0.503   0.617       49.3 -1.57e+1
+## 14 V1_CB_PLT    5.25    308.      303.         0.503   0.617       49.3 -1.57e+1
+## 15 V1_CB_RBC   -0.142     4.84      4.98      -0.977   0.333       48.6 -4.35e-1
+## 16 V1_CB_RBC   -0.142     4.84      4.98      -0.977   0.333       48.6 -4.35e-1
+## 17 V1_CB_WBC   -0.196     5.98      6.18      -0.548   0.586       49.1 -9.15e-1
+## 18 V1_CB_WBC   -0.196     5.98      6.18      -0.548   0.586       49.1 -9.15e-1
+## 19 V1_TIDES_A…  0.0385    4.62      4.58       0.0738  0.941       50.0 -1.01e+0
+## 20 V1_TIDES_A…  0.0385    4.62      4.58       0.0738  0.941       50.0 -1.01e+0
+## # ℹ 8 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;, alternative &lt;chr&gt;,
+## #   holm_adjusted_p &lt;dbl&gt;, fdr_adjusted_p &lt;dbl&gt;, V0_GRP &lt;fct&gt;,
+## #   `Среднее по группам` &lt;dbl&gt;, `Медиана по группам` &lt;dbl&gt;</code></pre>
+<p>Таким образом, группы терапии статистически значимо не различаются по
+измеряемым численным показателям.</p>
+<p>Для категориальных переменных сравнение представлено ниже:</p>
+<pre class="r"><code>factor_columns &lt;- names(data_filtered)[grepl(&quot;V1|V0&quot;, names(data_filtered)) &amp; sapply(data_filtered, is.factor) &amp; names(data_filtered) != &#39;V0_GRP&#39;]
+
+filtered_columns &lt;- factor_columns[sapply(data_filtered[factor_columns], function(x) length(unique(x)) &gt; 1)]
+
+# Применяем точный тест Фишера
+fisher_results_df &lt;- lapply(filtered_columns, function(var) {
+  test_result &lt;- fisher.test(table(data_filtered[[var]], data_filtered$V0_GRP))
+  tidy(test_result) %&gt;% mutate(variable = var)
+}) %&gt;% bind_rows()
+
+fisher_results_df$holm_adjusted_p &lt;- p.adjust(fisher_results_df$p.value, method = &quot;holm&quot;)
+fisher_results_df$bonferroni_adjusted_p &lt;- p.adjust(fisher_results_df$p.value, method = &quot;bonferroni&quot;)
+
+write.csv(fisher_results_df, file = &#39;fisher_results_df.csv&#39;)
+
+print(fisher_results_df)</code></pre>
+<pre><code>## # A tibble: 2 × 9
+##   estimate p.value conf.low conf.high method                alternative variable
+##      &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;                 &lt;chr&gt;       &lt;chr&gt;   
+## 1        1       1   0.0123      81.5 Fisher&#39;s Exact Test … two.sided   V1_NORM…
+## 2        0       1   0           39.0 Fisher&#39;s Exact Test … two.sided   V1_NORM…
+## # ℹ 2 more variables: holm_adjusted_p &lt;dbl&gt;, bonferroni_adjusted_p &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<div id="оценка-эффективности" class="section level1">
+<h1>5. Оценка эффективности</h1>
+<p>Проведен тест на нормальность</p>
+<pre class="r"><code>shapiro.test(data$V2_TIDES_AMOUNT)</code></pre>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  data$V2_TIDES_AMOUNT
+## W = 0.96633, p-value = 0.1472</code></pre>
+<p>Гипотезу о нормальном распределении переменной отвергнуть не можем
+(p-value = 0.1472). Далее исходим из допущения, что данная переменная
+распределена нормально. Также, исходя из литературных данных, используем
+допущение о равенстве дисперсий в выборках. Проведен односторонний
+t-test для независимых выборок с одинаковыми дисперсиями.</p>
+<pre class="r"><code># Разделение данных на две группы
+group1 &lt;- data %&gt;% 
+  filter(V0_GRP == &quot;Мастодинон&quot;)
+group2 &lt;- data %&gt;% 
+  filter(V0_GRP == &quot;Плацебо&quot;)
+
+# Проведение t-теста
+t_test_result &lt;- t.test(group1$V2_TIDES_AMOUNT, group2$V2_TIDES_AMOUNT, var.equal = T, alternative = &quot;less&quot;, mu = -2)
+
+# Вывод результатов теста
+print(t_test_result)</code></pre>
+<pre><code>## 
+##  Two Sample t-test
+## 
+## data:  group1$V2_TIDES_AMOUNT and group2$V2_TIDES_AMOUNT
+## t = 3.1724, df = 50, p-value = 0.9987
+## alternative hypothesis: true difference in means is less than -2
+## 95 percent confidence interval:
+##      -Inf 0.938979
+## sample estimates:
+## mean of x mean of y 
+##  4.423077  4.500000</code></pre>
+<p>Статистически значимых различий между контрольной группой и группой
+плацебо не обнаружено (p-value = 0.9987). Таким образом, первичная
+конечная точка не достигнута.</p>
+</div>
+<div id="оценка-безопасности" class="section level1">
+<h1>6. Оценка безопасности</h1>
+<p>Количественные переменные</p>
+<pre class="r"><code>data &lt;- read.csv2(&quot;../data/team_5.csv&quot;)
+data_filtered &lt;- data %&gt;%
+  mutate_if(is.character, as.factor) %&gt;%
+  mutate(
+    V0_DEM_GEN = factor(&quot;ж&quot;),
+    V0_DEM_AGE = V0_DEM_AGE + 20
+  ) %&gt;%
+   mutate_at(vars(contains(&#39;NORM&#39;)), as.factor)
+head(data_filtered) </code></pre>
+<pre><code>##   ID     V0_GRP V0_DEM_GEN V0_DEM_AGE V1_TIDES_AMOUNT V2_TIDES_AMOUNT V1_CB_WBC
+## 1  1 Мастодинон          ж         55               2               4       4.3
+## 2  3 Мастодинон          ж         47               5               4       6.5
+## 3  5 Мастодинон          ж         55               5               8       5.8
+## 4  7 Мастодинон          ж         45               6               6       6.4
+## 5  9 Мастодинон          ж         45               5               0       6.6
+## 6 11 Мастодинон          ж         51               6               4       4.7
+##   V1_CB_RBC V1_CB_HGB V1_CB_HCT V1_CB_PLT V1_CB_NEUT. V1_CB_LYM. V1_CB_MON.
+## 1       4.1     131.8      0.40     269.7         5.4        1.3        0.1
+## 2       5.1     144.9      0.41     318.2         2.8        1.2        0.1
+## 3       4.8     147.1      0.44     295.0         3.1        1.7        0.1
+## 4       4.2     127.7      0.45     342.7         4.1        2.2        0.1
+## 5       4.5     137.7      0.43     291.4         2.3        1.3        0.1
+## 6       5.2     121.1      0.39     240.6         3.3        1.4        0.1
+##   V1_CB_EO. V1_CB_BAS. V1_NORM_ECG V1_NORM_PHYS V1_NORM_VIT V2_CB_WBC V2_CB_RBC
+## 1       0.1          0           0            0           0       5.4       4.4
+## 2       0.1          0           0            0           0       7.3       4.0
+## 3       0.1          0           0            0           0       4.0       5.0
+## 4       0.1          0           0            0           0       7.7       5.5
+## 5       0.1          0           0            0           0       4.5       5.2
+## 6       0.1          0           0            0           0       4.7       4.4
+##   V2_CB_HGB V2_CB_HCT V2_CB_PLT V2_CB_NEUT. V2_CB_LYM. V2_CB_MON. V2_CB_EO.
+## 1     126.0      0.46     302.1         3.3        1.7        0.1       0.1
+## 2     129.2      0.40     318.1         2.0        1.2        0.1       0.1
+## 3     122.9      0.42     290.8         2.2        1.7        0.1       0.1
+## 4     136.1      0.42     338.6         2.6        1.2        0.1       0.1
+## 5     124.4      0.45     314.4         3.1        1.9        0.1       0.1
+## 6     141.0      0.48     265.4         3.6        1.1        0.1       0.1
+##   V2_CB_BAS. V2_NORM_ECG V2_NORM_PHYS V2_NORM_VIT
+## 1          0           0            0           0
+## 2          0           0            0           0
+## 3          0           0            0           0
+## 4          0           0            0           0
+## 5          0           0            0           0
+## 6          0           0            1           0</code></pre>
+<pre class="r"><code>non_unique &lt;- names(data_filtered)[sapply(data_filtered, function(x) length(unique(x)) == 1)]
+
+cat(&#39;Колонки с одинаковыми значениями, которые не подлежат сравнению:&#39;, paste(non_unique, collapse = &#39;, &#39;), &#39;\n&#39;)</code></pre>
+<pre><code>## Колонки с одинаковыми значениями, которые не подлежат сравнению: V0_DEM_GEN, V1_CB_MON., V1_CB_EO., V1_NORM_VIT, V2_CB_MON., V2_CB_EO., V2_NORM_ECG, V2_NORM_VIT</code></pre>
+<p>“CB_MON.”, “CB_EO.” не отличаются, проверка по ним не проводилась</p>
+<p>Числовые переменные: проведен тест Уилкоксона для зависимых
+переменных. Группа Мастодинона:</p>
+<pre class="r"><code>data_cleaned &lt;- data_filtered
+data_control &lt;- data_cleaned %&gt;%
+  filter(V0_GRP == &quot;Мастодинон&quot;)
+
+names &lt;- c(&quot;CB_WBC&quot;, &quot;CB_RBC&quot;, &quot;CB_HGB&quot;, &quot;CB_HCT&quot;, 
+           &quot;CB_PLT&quot;, &quot;CB_NEUT.&quot;, &quot;CB_LYM.&quot;, &quot;CB_BAS.&quot;)
+
+
+# Создаем пустой датафрейм для сохранения результатов
+wilcox_results_df &lt;- data.frame()
+
+for (name in names) {
+  name_1 &lt;- paste0(&quot;V1_&quot;, name)
+  name_2 &lt;- paste0(&quot;V2_&quot;, name)
+  # Проводим тест и сохраняем результаты в датафрейме
+  result &lt;- data_control %&gt;%
+    select(ID, name_1, name_2) %&gt;%
+    pivot_longer(!ID) %&gt;%
+    wilcox_test(value ~ name, paired = TRUE, detailed = TRUE) 
+  
+  # Добавляем результаты к датафрейму
+  wilcox_results_df &lt;- bind_rows(wilcox_results_df, result)
+}</code></pre>
+<pre><code>## Warning: Using an external vector in selections was deprecated in tidyselect 1.1.0.
+## ℹ Please use `all_of()` or `any_of()` instead.
+##   # Was:
+##   data %&gt;% select(name_1)
+## 
+##   # Now:
+##   data %&gt;% select(all_of(name_1))
+## 
+## See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.</code></pre>
+<pre><code>## Warning: Using an external vector in selections was deprecated in tidyselect 1.1.0.
+## ℹ Please use `all_of()` or `any_of()` instead.
+##   # Was:
+##   data %&gt;% select(name_2)
+## 
+##   # Now:
+##   data %&gt;% select(all_of(name_2))
+## 
+## See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.</code></pre>
+<pre class="r"><code># Выводим весь датафрейм с результатами тестов
+wilcox_results_df %&gt;% 
+  select(group1, statistic, p, conf.low, conf.high)</code></pre>
+<pre><code>##        group1 statistic     p    conf.low    conf.high
+## 1   V1_CB_WBC     154.5 0.909 -0.69996090  0.949999084
+## 2   V1_CB_RBC     137.5 0.509 -0.49995523  0.299932649
+## 3   V1_CB_HGB     141.0 0.394 -8.40000000  3.600000000
+## 4   V1_CB_HCT     115.5 0.502 -0.02003553  0.009944855
+## 5   V1_CB_PLT     227.0 0.199 -8.15000000 23.450000000
+## 6 V1_CB_NEUT.     173.0 0.520 -0.44993862  0.849999311
+## 7  V1_CB_LYM.     162.0 0.474 -0.15001693  0.349970475
+## 8  V1_CB_BAS.       1.0 1.000         NaN          NaN</code></pre>
+<p>Группа Плацебо:</p>
+<pre class="r"><code>data_cleaned &lt;- data_filtered
+data_control &lt;- data_cleaned %&gt;%
+  filter(V0_GRP == &quot;Плацебо&quot;)
+
+names &lt;- c(&quot;CB_WBC&quot;, &quot;CB_RBC&quot;, &quot;CB_HGB&quot;, &quot;CB_HCT&quot;, 
+           &quot;CB_PLT&quot;, &quot;CB_NEUT.&quot;, &quot;CB_LYM.&quot;, &quot;CB_BAS.&quot;)
+
+
+# Создаем пустой датафрейм для сохранения результатов
+wilcox_results_df &lt;- data.frame()
+
+for (name in names) {
+  name_1 &lt;- paste0(&quot;V1_&quot;, name)
+  name_2 &lt;- paste0(&quot;V2_&quot;, name)
+  # Проводим тест и сохраняем результаты в датафрейме
+  result &lt;- data_control %&gt;%
+    select(ID, name_1, name_2) %&gt;%
+    pivot_longer(!ID) %&gt;%
+    wilcox_test(value ~ name, paired = TRUE, detailed = TRUE) 
+  
+  # Добавляем результаты к датафрейму
+  wilcox_results_df &lt;- bind_rows(wilcox_results_df, result)
+}
+
+# Выводим весь датафрейм с результатами тестов
+wilcox_results_df %&gt;% 
+  select(group1, statistic, p, conf.low, conf.high)</code></pre>
+<pre><code>##        group1 statistic     p     conf.low    conf.high
+## 1   V1_CB_WBC     191.5 0.443  -0.54994425  1.250054483
+## 2   V1_CB_RBC     122.0 0.178  -0.45001624  0.099996252
+## 3   V1_CB_HGB     153.0 0.576  -6.19995971  3.949954939
+## 4   V1_CB_HCT      56.0 0.120  -0.03500891  0.005006703
+## 5   V1_CB_PLT     173.0 0.960 -25.05000000 21.500000000
+## 6 V1_CB_NEUT.     116.5 0.221  -1.10004665  0.299990190
+## 7  V1_CB_LYM.     114.5 0.483  -0.35000850  0.150053718
+## 8  V1_CB_BAS.       1.5 1.000   0.00000000  0.000000000</code></pre>
+<p>Переменные “CB_MON.”, “CB_EO.” в приведенных данных принимают только
+одно константное значение значение, проверка по ним не проводилась.</p>
+<p>Данные по общему анализу крови до и после лечения в группе
+Мастандиона, как и в группе Плацебо, статистически значимо не
+отличаются.</p>
+<p>Категориальные переменные</p>
+<pre class="r"><code>#Сабсет с группой Мастодинона: 
+data2 &lt;- data_cleaned %&gt;%
+  filter(V0_GRP == &quot;Мастодинон&quot;)
+
+#ЭКГ в группе Мастодинона:
+sopr2 &lt;- data2 %&gt;%       
+  select(V1_NORM_ECG, V2_NORM_ECG)
+
+sopr_ispravl &lt;- matrix(c(sum(sopr2[,1] == 0 &amp; sopr2[,2] == 0), sum(sopr2[,1] == 0 &amp; sopr2[,2] == 1), sum(sopr2[,1] == 1 &amp; sopr2[,2] == 0), sum(sopr2[,1] == 1 &amp; sopr2[,2] == 1)), nrow = 2, ncol = 2, byrow = TRUE, dimnames = list(c(&quot;V1_ECG_NORM=0&quot;, &quot;V1_ECG_NORM=1&quot;), c(&quot;V2_ECG_NORM=0&quot;, &quot;V2_ECG_NORM=1&quot;))) %&gt;% print()</code></pre>
+<pre><code>##               V2_ECG_NORM=0 V2_ECG_NORM=1
+## V1_ECG_NORM=0            25             0
+## V1_ECG_NORM=1             1             0</code></pre>
+<pre class="r"><code>mcn1 &lt;- sopr_ispravl %&gt;%
+  mcnemar.test() %&gt;%
+  tidy()
+
+#Физикальный осмотр в группе Мастодинона:
+sopr2 &lt;- data2 %&gt;%       
+  select(V1_NORM_PHYS, V2_NORM_PHYS)
+
+sopr_ispravl &lt;- matrix(c(sum(sopr2[,1] == 0 &amp; sopr2[,2] == 0), sum(sopr2[,1] == 0 &amp; sopr2[,2] == 1), sum(sopr2[,1] == 1 &amp; sopr2[,2] == 0), sum(sopr2[,1] == 1 &amp; sopr2[,2] == 1)), nrow = 2, ncol = 2, byrow = TRUE, dimnames = list(c(&quot;V1_ECG_PHYS=0&quot;, &quot;V1_ECG_PHYS=1&quot;), c(&quot;V2_ECG_PHYS=0&quot;, &quot;V2_ECG_PHYS=1&quot;))) %&gt;% print()</code></pre>
+<pre><code>##               V2_ECG_PHYS=0 V2_ECG_PHYS=1
+## V1_ECG_PHYS=0            23             2
+## V1_ECG_PHYS=1             1             0</code></pre>
+<pre class="r"><code>mcn2 &lt;- sopr_ispravl %&gt;%
+  mcnemar.test() %&gt;%
+  tidy()
+
+#Витальные показатели осмотр в группе Мастодинона:
+sopr2 &lt;- data2 %&gt;%       
+  select(V1_NORM_VIT, V2_NORM_VIT)
+
+sopr_ispravl &lt;- matrix(c(sum(sopr2[,1] == 0 &amp; sopr2[,2] == 0), sum(sopr2[,1] == 0 &amp; sopr2[,2] == 1), sum(sopr2[,1] == 1 &amp; sopr2[,2] == 0), sum(sopr2[,1] == 1 &amp; sopr2[,2] == 1)), nrow = 2, ncol = 2, byrow = TRUE, dimnames = list(c(&quot;V1_ECG_VIT=0&quot;, &quot;V1_ECG_VIT=1&quot;), c(&quot;V2_ECG_VIT=0&quot;, &quot;V2_ECG_VIT=1&quot;))) %&gt;% print()</code></pre>
+<pre><code>##              V2_ECG_VIT=0 V2_ECG_VIT=1
+## V1_ECG_VIT=0           26            0
+## V1_ECG_VIT=1            0            0</code></pre>
+<pre class="r"><code>mcn3 &lt;- sopr_ispravl %&gt;%
+  mcnemar.test() %&gt;%
+  tidy()
+
+#Сабсет с группой Плацебо: 
+data3 &lt;- data_cleaned %&gt;%
+  filter(V0_GRP == &quot;Плацебо&quot;)
+
+#ЭКГ в группе Плацебо:
+sopr3 &lt;- data3 %&gt;%       
+  select(V1_NORM_ECG, V2_NORM_ECG)
+
+sopr_ispravl &lt;- matrix(c(sum(sopr3[,1] == 0 &amp; sopr3[,2] == 0), sum(sopr3[,1] == 0 &amp; sopr3[,2] == 1), sum(sopr3[,1] == 1 &amp; sopr3[,2] == 0), sum(sopr3[,1] == 1 &amp; sopr3[,2] == 1)), nrow = 2, ncol = 2, byrow = TRUE, dimnames = list(c(&quot;V1_ECG_NORM=0&quot;, &quot;V1_ECG_NORM=1&quot;), c(&quot;V2_ECG_NORM=0&quot;, &quot;V2_ECG_NORM=1&quot;))) %&gt;% print()</code></pre>
+<pre><code>##               V2_ECG_NORM=0 V2_ECG_NORM=1
+## V1_ECG_NORM=0            25             0
+## V1_ECG_NORM=1             1             0</code></pre>
+<pre class="r"><code>mcn4 &lt;- sopr_ispravl %&gt;%
+  mcnemar.test() %&gt;%
+  tidy()
+
+#Физикальный осмотр в группе Плацебо:
+sopr3 &lt;- data3 %&gt;%       
+  select(V1_NORM_PHYS, V2_NORM_PHYS)
+
+sopr_ispravl &lt;- matrix(c(sum(sopr3[,1] == 0 &amp; sopr3[,2] == 0), sum(sopr3[,1] == 0 &amp; sopr3[,2] == 1), sum(sopr3[,1] == 1 &amp; sopr3[,2] == 0), sum(sopr3[,1] == 1 &amp; sopr3[,2] == 1)), nrow = 2, ncol = 2, byrow = TRUE, dimnames = list(c(&quot;V1_ECG_PHYS=0&quot;, &quot;V1_ECG_PHYS=1&quot;), c(&quot;V2_ECG_PHYS=0&quot;, &quot;V2_ECG_PHYS=1&quot;))) %&gt;% print()</code></pre>
+<pre><code>##               V2_ECG_PHYS=0 V2_ECG_PHYS=1
+## V1_ECG_PHYS=0            23             3
+## V1_ECG_PHYS=1             0             0</code></pre>
+<pre class="r"><code>mcn5 &lt;- sopr_ispravl %&gt;%
+  mcnemar.test() %&gt;%
+  tidy()
+
+#Витальные показатели осмотр в группе Плацебо:
+sopr3 &lt;- data3 %&gt;%       
+  select(V1_NORM_VIT, V2_NORM_VIT)
+
+sopr_ispravl &lt;- matrix(c(sum(sopr3[,1] == 0 &amp; sopr3[,2] == 0), sum(sopr3[,1] == 0 &amp; sopr3[,2] == 1), sum(sopr3[,1] == 1 &amp; sopr3[,2] == 0), sum(sopr3[,1] == 1 &amp; sopr3[,2] == 1)), nrow = 2, ncol = 2, byrow = TRUE, dimnames = list(c(&quot;V1_ECG_VIT=0&quot;, &quot;V1_ECG_VIT=1&quot;), c(&quot;V2_ECG_VIT=0&quot;, &quot;V2_ECG_VIT=1&quot;))) %&gt;% print()</code></pre>
+<pre><code>##              V2_ECG_VIT=0 V2_ECG_VIT=1
+## V1_ECG_VIT=0           26            0
+## V1_ECG_VIT=1            0            0</code></pre>
+<pre class="r"><code>mcn6 &lt;- sopr_ispravl %&gt;%
+  mcnemar.test() %&gt;%
+  tidy()
+
+# Создайте список из ваших датафреймов
+df_list &lt;- list(mcn1, mcn2, mcn3, mcn4, mcn5, mcn6)
+
+# Объедините датафреймы по строкам
+combined_df &lt;- bind_rows(df_list)
+
+# Посмотрите на объединенный датафрейм
+print(combined_df)</code></pre>
+<pre><code>## # A tibble: 6 × 4
+##   statistic p.value parameter method                                            
+##       &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;                                             
+## 1      0      1             1 McNemar&#39;s Chi-squared test with continuity correc…
+## 2      0      1             1 McNemar&#39;s Chi-squared test with continuity correc…
+## 3    NaN    NaN             1 McNemar&#39;s Chi-squared test                        
+## 4      0      1             1 McNemar&#39;s Chi-squared test with continuity correc…
+## 5      1.33   0.248         1 McNemar&#39;s Chi-squared test with continuity correc…
+## 6    NaN    NaN             1 McNemar&#39;s Chi-squared test</code></pre>
+<p>Данные по ЭКГ, физикальному осмотру и оценке жизненно-важных
+показателей до и после лечения в группе Мастандиона, как и в группе
+Плацебо, статистически значимо не отличаются.</p>
+<p>Сравнение численных характеристик по группам на визит 2</p>
+<pre class="r"><code>non_unique &lt;- names(data_filtered)[sapply(data_filtered, function(x) length(unique(x)) == 1)]
+
+data_filtered &lt;- data_filtered %&gt;% select(-all_of(non_unique))
+v2_num_columns &lt;- names(data_filtered)[grepl(&quot;V2&quot;, names(data_filtered)) &amp; sapply(data_filtered, is.numeric)]
+
+group_stats &lt;- data_filtered %&gt;%
+  select(all_of(v2_num_columns), V0_GRP) %&gt;%
+  pivot_longer(cols = all_of(v2_num_columns), names_to = &quot;переменная&quot;, values_to = &quot;value&quot;) %&gt;%
+  group_by(переменная, V0_GRP) %&gt;%
+  summarise(&#39;Среднее по группам&#39; = mean(value), &#39;Медиана по группам&#39; = median(value), .groups = &#39;drop&#39;)
+
+t_test_results &lt;- data_filtered %&gt;%
+  select(all_of(v2_num_columns), V0_GRP) %&gt;%
+  pivot_longer(cols = all_of(v2_num_columns), names_to = &quot;переменная&quot;, values_to = &quot;value&quot;) %&gt;%
+  group_by(переменная) %&gt;%
+  do(tidy(t.test(value ~ V0_GRP, data = .)))
+
+t_test_results$holm_adjusted_p &lt;- p.adjust(t_test_results$p.value, method = &quot;holm&quot;)
+t_test_results$fdr_adjusted_p &lt;- p.adjust(t_test_results$p.value, method = &quot;fdr&quot;)
+
+cat(&#39;Различающиеся колонки до поправок: &#39;, paste((t_test_results %&gt;%
+  filter(p.value &lt;= 0.05))$переменная, collapse = &#39;, &#39;), &#39;\n&#39;)</code></pre>
+<pre><code>## Различающиеся колонки до поправок:</code></pre>
+<pre class="r"><code>cat(&#39;Различающиеся колонки после поправки Холма: &#39;, paste((t_test_results %&gt;%
+  filter(holm_adjusted_p &lt;= 0.05))$переменная, collapse = &#39;, &#39;), &#39;\n&#39;)</code></pre>
+<pre><code>## Различающиеся колонки после поправки Холма:</code></pre>
+<pre class="r"><code>t_test_results &lt;- left_join(t_test_results, group_stats, by = &quot;переменная&quot;)
+
+write.csv(fisher_results_df, file = &#39;t_test_results_v2.csv&#39;)
+
+print(t_test_results)</code></pre>
+<pre><code>## # A tibble: 18 × 16
+## # Groups:   переменная [9]
+##    переменная  estimate estimate1 estimate2 statistic p.value parameter conf.low
+##    &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+##  1 V2_CB_BAS.  -0.00385     0       0.00385   -1        0.327      25    -0.0118
+##  2 V2_CB_BAS.  -0.00385     0       0.00385   -1        0.327      25    -0.0118
+##  3 V2_CB_HCT    0.00308     0.418   0.415      0.380    0.706      49.9  -0.0132
+##  4 V2_CB_HCT    0.00308     0.418   0.415      0.380    0.706      49.9  -0.0132
+##  5 V2_CB_HGB    1.02      136.    135.         0.430    0.669      49.9  -3.75  
+##  6 V2_CB_HGB    1.02      136.    135.         0.430    0.669      49.9  -3.75  
+##  7 V2_CB_LYM.   0.0615      1.55    1.49       0.656    0.515      46.1  -0.127 
+##  8 V2_CB_LYM.   0.0615      1.55    1.49       0.656    0.515      46.1  -0.127 
+##  9 V2_CB_NEUT. -0.0962      3.45    3.55      -0.388    0.700      48.7  -0.594 
+## 10 V2_CB_NEUT. -0.0962      3.45    3.55      -0.388    0.700      48.7  -0.594 
+## 11 V2_CB_PLT   -6.64      298.    305.        -0.880    0.383      49.3 -21.8   
+## 12 V2_CB_PLT   -6.64      298.    305.        -0.880    0.383      49.3 -21.8   
+## 13 V2_CB_RBC   -0.25        4.93    5.18      -1.63     0.110      46.9  -0.558 
+## 14 V2_CB_RBC   -0.25        4.93    5.18      -1.63     0.110      46.9  -0.558 
+## 15 V2_CB_WBC   -0.0231      5.85    5.87      -0.0627   0.950      49.7  -0.762 
+## 16 V2_CB_WBC   -0.0231      5.85    5.87      -0.0627   0.950      49.7  -0.762 
+## 17 V2_TIDES_A… -0.0769      4.42    4.5       -0.127    0.900      49.9  -1.29  
+## 18 V2_TIDES_A… -0.0769      4.42    4.5       -0.127    0.900      49.9  -1.29  
+## # ℹ 8 more variables: conf.high &lt;dbl&gt;, method &lt;chr&gt;, alternative &lt;chr&gt;,
+## #   holm_adjusted_p &lt;dbl&gt;, fdr_adjusted_p &lt;dbl&gt;, V0_GRP &lt;fct&gt;,
+## #   `Среднее по группам` &lt;dbl&gt;, `Медиана по группам` &lt;dbl&gt;</code></pre>
+<p>Сравнение категориальных характеристик по группам на визит 2</p>
+<pre class="r"><code>factor_columns &lt;- names(data_filtered)[grepl(&quot;V2&quot;, names(data_filtered)) &amp; sapply(data_filtered, is.factor) &amp; names(data_filtered) != &#39;V0_GRP&#39;]
+
+filtered_columns &lt;- factor_columns[sapply(data_filtered[factor_columns], function(x) length(unique(x)) &gt; 1)]
+
+# Применяем точный тест Фишера
+fisher_results_df &lt;- lapply(filtered_columns, function(var) {
+  test_result &lt;- fisher.test(table(data_filtered[[var]], data_filtered$V0_GRP))
+  tidy(test_result) %&gt;% mutate(variable = var)
+}) %&gt;% bind_rows()
+
+fisher_results_df$holm_adjusted_p &lt;- p.adjust(fisher_results_df$p.value, method = &quot;holm&quot;)
+fisher_results_df$bonferroni_adjusted_p &lt;- p.adjust(fisher_results_df$p.value, method = &quot;bonferroni&quot;)
+fisher_results_df</code></pre>
+<pre><code>## # A tibble: 1 × 9
+##   estimate p.value conf.low conf.high method                alternative variable
+##      &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;                 &lt;chr&gt;       &lt;chr&gt;   
+## 1     1.55       1    0.162      20.2 Fisher&#39;s Exact Test … two.sided   V2_NORM…
+## # ℹ 2 more variables: holm_adjusted_p &lt;dbl&gt;, bonferroni_adjusted_p &lt;dbl&gt;</code></pre>
+<p>Заключение: Клинически значимых нежелательных явлений при применении
+препарата Мастодинон по 40 кап перед завтраком в течение 4 недель по
+сравнению с Плацебо не получено.</p>
+</div>
+<div id="обсуждение-и-общее-заключение" class="section level1">
+<h1>7. Обсуждение и общее заключение</h1>
+<p>По результатам настоящего исследования не получено данных,
+подтверждающих эффективность препарата Мастодинон по сравнению с плацебо
+(первичная конечная точка не достигнута). Также при применении препарата
+Мастодинон не получено клинически значимых нежелательных явлений,
+связанных/не связанных с применением препарата, в том числе требовавших
+прекращения терапии. Таким образом, по результатам настоящего
+исследования судить о возможности расширения показания для препарата
+(применение при постменопаузальном синдроме) не представляется
+возможным.</p>
+</div>
 
 
 
